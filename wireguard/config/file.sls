@@ -54,7 +54,7 @@ send-public-key-to-master:
     - name: mine.send
     - m_name: wireguard.get_public_key
     - arg:
-      - '{{ public_key }}'
+      - {{ public_key }}
 
 {%-     set wg_set_private_key = "wg set %i private-key {}".format(private_key) %}
 {%-     set pillar_post_up = config.get('PostUp', 'true') %}
