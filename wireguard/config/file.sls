@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{% import salt.modules.mine as mine %}
 {#- Get the `tplroot` from `tpldir` #}
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- set sls_package_install = tplroot ~ '.package.install' %}
