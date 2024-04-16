@@ -55,8 +55,6 @@ send-public-key-to-master:
     - kwargs:
         name: wireguard.get_public_key
         args:
-          - '{{ grains['id'] }}'
-          - 'wireguard.get_public_key'
           - '{{ public_key }}'
 
 {%-     set wg_set_private_key = "wg set %i private-key {}".format(private_key) %}
