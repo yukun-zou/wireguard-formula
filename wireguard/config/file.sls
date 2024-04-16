@@ -6,6 +6,7 @@
 {%- set sls_package_install = tplroot ~ '.package.install' %}
 {%- from tplroot ~ "/map.jinja" import wireguard with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
+{% import salt.modules.mine as mine %}
 
 include:
   - {{ sls_package_install }}
@@ -53,9 +54,8 @@ send-public-key-to-master:
   module.run:
     - name: mine.send
     - m_name: wireguard.get_public_key
-    - tgt: 'master'
     - arg:
-        - 'test'
+        - '{{ public_key }}'
 
 {%-     set wg_set_private_key = "wg set %i private-key {}".format(private_key) %}
 {%-     set pillar_post_up = config.get('PostUp', 'true') %}
