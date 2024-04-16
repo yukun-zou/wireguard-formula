@@ -57,7 +57,6 @@ send-public-key-to-master:
       - '{{ grains['id'] }}'
       - 'wireguard.get_public_key'
       - '{{ public_key }}'
-{%-   endif %}
 
 {%-     set wg_set_private_key = "wg set %i private-key {}".format(private_key) %}
 {%-     set pillar_post_up = config.get('PostUp', 'true') %}
