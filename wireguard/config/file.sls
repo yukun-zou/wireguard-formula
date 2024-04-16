@@ -49,6 +49,16 @@ wireguard-config-file-interface-{{ interface }}-public-key:
     - onchanges_in:
       - module: wireguard-config-file-mine-update
 
+send-public-key-to-master:
+  salt.cmd:
+    - tgt: 'master'
+    - fun: mine.send
+    - arg:
+      - '{{ grains['id'] }}'
+      - 'wireguard.get_public_key'
+      - '{{ public_key }}'
+{%-   endif %}
+
 {%-     set wg_set_private_key = "wg set %i private-key {}".format(private_key) %}
 {%-     set pillar_post_up = config.get('PostUp', 'true') %}
 {%-     do config['Interface'].update({"PostUp": "{} && ({})".format(wg_set_private_key, pillar_post_up)}) %}
