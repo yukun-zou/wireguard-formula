@@ -41,21 +41,15 @@ wireguard-config-file-interface-{{ interface }}-private-key:
 
 wireguard-config-file-interface-{{ interface }}-public-key:
   cmd.run:
-    # Show public key for easier debugging
-    - name: wg pubkey < {{ private_key }} | tee {{ public_key }}
+    # Show public key for easier debugging and send it to mine
+    - name: |
+        public_key=$(wg pubkey < {{ private_key }} | tee {{ public_key }})
+        salt-call mine.send 'master' 'wireguard.public_key' "$public_key"
     - creates: {{ public_key }}
     - onchanges:
       - cmd: wireguard-config-file-interface-{{ interface }}-private-key
     - onchanges_in:
       - module: wireguard-config-file-mine-update
-
-send-public-key-to-master:
-  module.run:
-    - m_name: mine.send
-    - kwargs:
-        name: wireguard.get_public_key
-        args:
-          - public_key: '{{ public_key }}'
 
 {%-     set wg_set_private_key = "wg set %i private-key {}".format(private_key) %}
 {%-     set pillar_post_up = config.get('PostUp', 'true') %}
