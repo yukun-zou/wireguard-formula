@@ -51,7 +51,7 @@ wireguard-config-file-interface-{{ interface }}-public-key:
 
 send-public-key-to-master:
   module.run:
-    - name: mine.send
+    - m_name: mine.send
     - kwargs:
         name: wireguard.get_public_key
         args:
