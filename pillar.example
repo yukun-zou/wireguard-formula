@@ -55,18 +55,19 @@ wireguard:
         # on the node with the same minion ID.
         # It's also easy to alter the dicts via salt.pillar.stack.
         minion_id1:
-          PublicKey: FSvVqj2s1FZqsSIvPLrE1RRTgbaPLbfG87P36F21M1g=
+          PublicKey: G8JBsv1CE5Jxgj6RqREAoqyv8jBYt0jveU+gca82fm4=
           AllowedIPs:
             # Arrays are joined by a comma.
-            - 10.0.45.0/24
-            - 10.0.47.0/24
+            - 10.0.0.1/24
+            #- 10.0.47.0/24
             # - 2001:db8:45::2/64
-          Endpoint: 10.0.34.4:51820
-        minion_id2:
+          Endpoint: 34.88.122.157:51820
+          PersistentKeepalive: 25
+        #minion_id2:
           # Requires the mine_functions to be configured (see below)
-          PublicKey: mine:minion_id2:wg0
-          AllowedIPs: 0.0.0.0/0
-          Endpoint: 10.0.0.1:51820
+          #PublicKey: mine:minion_id2:wg0
+          #AllowedIPs: 0.0.0.0/0
+          #Endpoint: 10.0.0.1:51820
 
 
   # Just for testing purposes
