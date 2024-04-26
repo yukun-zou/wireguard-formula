@@ -26,7 +26,7 @@ wireguard-config-file-mine-update:
 
 {%- for interface, config in interfaces.items() %}
 
-{%-   set private_key = "{}/{}.priv".format(wireguard.config, interface) %}
+{%-   set private_key = "{}/{}.cred".format(wireguard.config, interface) %}
 {%-   set public_key = "{}/{}.pub".format(wireguard.config, interface) %}
 {%-   set private_key_specified = config.get('Interface', {}).get('PrivateKey', False) %}
 
@@ -34,7 +34,7 @@ wireguard-config-file-mine-update:
 wireguard-config-file-interface-{{ interface }}-private-key:
   cmd.run:
     - umask: "077"
-    - name: wg genkey > {{ private_key }}
+    - name: wg genkey | systemd-creds --tpm2-device=auto encrypt - {{ private_key }}
     - creates: {{ private_key }}
     - require_in:
       - file: "wireguard-config-file-interface-{{ interface }}-config"
@@ -50,7 +50,7 @@ wireguard-config-file-interface-{{ interface }}-public-key:
       - module: wireguard-config-file-mine-update
 
 
-{%-     set wg_set_private_key = "wg set %i private-key {}".format(private_key) %}
+{%-     set wg_set_private_key = "wg set %i private-key <(systemd-creds decrypt ".format(private_key) ")" %}
 {%-     set pillar_post_up = config.get('PostUp', 'true') %}
 {%-     do config['Interface'].update({"PostUp": "{} && ({})".format(wg_set_private_key, pillar_post_up)}) %}
 {%-   endif %}
