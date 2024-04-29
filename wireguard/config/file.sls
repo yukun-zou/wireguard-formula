@@ -51,7 +51,7 @@ wireguard-config-file-interface-{{ interface }}-public-key:
       - module: wireguard-config-file-mine-update
 
 
-{%-     set wg_set_private_key = "wg set %i private-key <(sudo systemd-creds decrypt {})" .format(private_key)  %}
+{%-     set wg_set_private_key = "wg set %i private-key <(sudo systemd-creds decrypt {})" .format(cred_key)  %}
 {%-     set pillar_post_up = config.get('PostUp', 'true') %}
 {%-     do config['Interface'].update({"PostUp": "{} && ({})".format(wg_set_private_key, pillar_post_up)}) %}
 {%-   endif %}
