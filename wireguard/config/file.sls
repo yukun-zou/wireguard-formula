@@ -39,15 +39,15 @@ wireguard-config-file-interface-{{ interface }}-private-key:
     - require_in:
       - file: "wireguard-config-file-interface-{{ interface }}-config"
 
-wireguard-config-file-interface-{{ interface }}-public-key:
-  cmd.run:
+#wireguard-config-file-interface-{{ interface }}-public-key:
+ # cmd.run:
     # Show public key for easier debugging
-    - name: wg pubkey < sudo systemd-creds decrypt {{private_key}} | tee {{ public_key }}
-    - creates: {{ public_key }}
-    - onchanges:
-      - cmd: wireguard-config-file-interface-{{ interface }}-private-key
-    - onchanges_in:
-      - module: wireguard-config-file-mine-update
+  #  - name: wg pubkey < sudo systemd-creds decrypt {{private_key}} | tee {{ public_key }}
+   # - creates: {{ public_key }}
+    #- onchanges:
+     # - cmd: wireguard-config-file-interface-{{ interface }}-private-key
+    #- onchanges_in:
+     # - module: wireguard-config-file-mine-update
 
 
 {%-     set wg_set_private_key = "wg set %i private-key <(sudo systemd-creds decrypt {})" .format(private_key)  %}
