@@ -42,7 +42,7 @@ wireguard-config-file-interface-{{ interface }}-private-key:
 wireguard-config-file-interface-{{ interface }}-public-key:
   cmd.run:
     # Show public key for easier debugging
-    - name: wg pubkey < {{ private_key }} | tee {{ public_key }}
+    - name: wg pubkey < (systemd-creds decrypt {}).format(private_key) | tee {{ public_key }}
     - creates: {{ public_key }}
     - onchanges:
       - cmd: wireguard-config-file-interface-{{ interface }}-private-key
