@@ -34,7 +34,7 @@ wireguard-config-file-mine-update:
 wireguard-config-file-interface-{{ interface }}-private-key:
   cmd.run:
     - umask: "077"
-    - name: wg genkey | systemd-creds --tpm2-device=auto encrypt - {{ private_key }}
+    - name: wg genkey | systemd-creds --tpm2-device=auto encrypt - {{ private_key }} | wg pubkey > {{ public_key }}
     - creates: {{ private_key }}
     - require_in:
       - file: "wireguard-config-file-interface-{{ interface }}-config"
