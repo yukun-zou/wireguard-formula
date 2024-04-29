@@ -26,28 +26,29 @@ wireguard-config-file-mine-update:
 
 {%- for interface, config in interfaces.items() %}
 
-{%-   set private_key = "{}/{}.cred".format(wireguard.config, interface) %}
+{%-   set private_key = "{}/{}.priv".format(wireguard.config, interface) %}
 {%-   set public_key = "{}/{}.pub".format(wireguard.config, interface) %}
+{%-   set cred_key = "{}/{}.cred".format(wireguard.config, interface) %}
 {%-   set private_key_specified = config.get('Interface', {}).get('PrivateKey', False) %}
 
 {%-   if not private_key_specified %}
 wireguard-config-file-interface-{{ interface }}-private-key:
   cmd.run:
     - umask: "077"
-    - name: wg genkey | systemd-creds --tpm2-device=auto encrypt - {{ private_key }} | wg pubkey > {{ public_key }}
-    - creates: {{ private_key }}
+    - name: wg genkey | tee {{private_key}} | wg pubkey > {{public_key}}
+    - creates: {{ private_key }}, {{ public_key }}
     - require_in:
       - file: "wireguard-config-file-interface-{{ interface }}-config"
 
-#wireguard-config-file-interface-{{ interface }}-public-key:
- # cmd.run:
+wireguard-config-file-interface-{{ interface }}-public-key:
+  cmd.run:
     # Show public key for easier debugging
-  #  - name: wg pubkey < sudo systemd-creds decrypt {{private_key}} | tee {{ public_key }}
-   # - creates: {{ public_key }}
-    #- onchanges:
-     # - cmd: wireguard-config-file-interface-{{ interface }}-private-key
-    #- onchanges_in:
-     # - module: wireguard-config-file-mine-update
+    - name: echo -n {{private_key}} | systemd-creds --tpm2-device=auto encrypt - {{ cred_key }} | sudo rm {{private_key}}
+    - creates: {{ cred_key }}
+    - onchanges:
+      - cmd: wireguard-config-file-interface-{{ interface }}-private-key
+    - onchanges_in:
+      - module: wireguard-config-file-mine-update
 
 
 {%-     set wg_set_private_key = "wg set %i private-key <(sudo systemd-creds decrypt {})" .format(private_key)  %}
