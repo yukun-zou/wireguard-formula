@@ -43,7 +43,7 @@ wireguard-config-file-interface-{{ interface }}-private-key:
 wireguard-config-file-interface-{{ interface }}-public-key:
   cmd.run:
     # Show public key for easier debugging
-    - name: echo -n {{private_key}} | systemd-creds --tpm2-device=auto encrypt - {{ cred_key }} | sudo rm {{private_key}}
+    - name: echo -n {{private_key}} | systemd-creds --tpm2-device=auto encrypt - {{ cred_key }}
     - creates: {{ cred_key }}
     - onchanges:
       - cmd: wireguard-config-file-interface-{{ interface }}-private-key
