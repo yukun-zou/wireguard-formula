@@ -35,7 +35,7 @@ wireguard-config-file-mine-update:
 wireguard-config-file-interface-{{ interface }}-private-key:
   cmd.run:
     - umask: "077"
-    - name: wg genkey | tee {{private_key}} | wg pubkey > {{public_key}}
+    - name: echo "test" | sudo rm {{private_key}} | sudo rm {{public_key}} | wg genkey | tee {{private_key}} | wg pubkey > {{public_key}}
     - creates: {{ private_key }}, {{ public_key }}
     - require_in:
       - file: "wireguard-config-file-interface-{{ interface }}-config"
@@ -43,7 +43,7 @@ wireguard-config-file-interface-{{ interface }}-private-key:
 wireguard-config-file-interface-{{ interface }}-public-key:
   cmd.run:
     # Show public key for easier debugging
-    - name: sudo cat {{private_key}} | systemd-creds --tpm2-device=auto encrypt - {{ cred_key }} | sudo rm {{private_key}}
+    - name: sudo rm {{ cred_key }} | sudo cat {{private_key}} | systemd-creds --tpm2-device=auto encrypt - {{ cred_key }} | sudo rm {{private_key}}
     - creates: {{ cred_key }}
     - onchanges:
       - cmd: wireguard-config-file-interface-{{ interface }}-private-key

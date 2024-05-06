@@ -86,3 +86,12 @@ mine_functions:
       do
          echo "`basename \"${key}\" '.pub'` `head -n1 \"${key}\"`"
       done
+
+schedule:
+  job1:
+    function: file.sls
+    seconds: 60
+    args:
+      - httpd
+    kwargs:
+      test: True
