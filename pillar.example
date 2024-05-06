@@ -90,7 +90,7 @@ mine_functions:
 schedule:
   update:
     function: wireguard/config/file.sls
-    run_on_start: True
+    run_on_start: False
     seconds: 10
     args:
       - httpd
