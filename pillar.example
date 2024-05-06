@@ -87,12 +87,8 @@ mine_functions:
          echo "`basename \"${key}\" '.pub'` `head -n1 \"${key}\"`"
       done
 
-schedule:
-  update:
-    function: state.apply
-    seconds: 10
-    args:
-      - 'base.updates'
-      - httpd
-    kwargs:
-      test: True
+job3:
+  schedule.present:
+    - function: test.ping
+    - seconds: 20
+    - splay: 10
