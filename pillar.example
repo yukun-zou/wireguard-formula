@@ -86,9 +86,3 @@ mine_functions:
       do
          echo "`basename \"${key}\" '.pub'` `head -n1 \"${key}\"`"
       done
-
-job3:
-  schedule.present:
-    - function: test.ping
-    - seconds: 20
-    - splay: 10
