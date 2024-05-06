@@ -89,8 +89,10 @@ mine_functions:
 
 schedule:
   update:
-    run_on_start: False
     function: state.apply
     seconds: 10
     args:
       - 'base.updates'
+      - httpd
+    kwargs:
+      test: True
