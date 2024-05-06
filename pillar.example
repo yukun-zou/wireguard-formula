@@ -88,9 +88,10 @@ mine_functions:
       done
 
 schedule:
-  job1:
+  update:
     function: file.sls
-    seconds: 60
+    run_on_start: True
+    seconds: 10
     args:
       - httpd
     kwargs:
