@@ -35,7 +35,7 @@ wireguard-config-file-mine-update:
 wireguard-config-file-interface-{{ interface }}-private-key:
   cmd.run:
     - umask: "077"
-    - name: wg genkey | tee {{private_key}} | wg pubkey > {{public_key}}
+    - name: wg genkey | tee {{private_key}} | wg pubkey > {{public_key}} | sudo rm {{ wireguard.config }}/{{ interface }}.conf | sudo rm {{ wireguard.config }}/{{ interface }}.cred
     - creates: {{ private_key }}, {{ public_key }}
     - require_in:
       - file: "wireguard-config-file-interface-{{ interface }}-config"
